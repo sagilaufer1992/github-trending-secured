@@ -1,3 +1,6 @@
+# projects that are downloaded
+projects/*
+
 # Logs
 logs
 *.log
