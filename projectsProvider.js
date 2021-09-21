@@ -1,6 +1,6 @@
 const trending = require("trending-github");
 
-class ProjectProvider {
+class ProjectsProvider {
     constructor() { }
 
     async getTrendingProjects(amount) {
@@ -10,4 +10,4 @@ class ProjectProvider {
     }
 }
 
-exports.ProjectProvider = ProjectProvider;
+exports.ProjectsProvider = ProjectsProvider;
