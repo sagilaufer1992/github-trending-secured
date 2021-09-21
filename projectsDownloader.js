@@ -11,9 +11,8 @@ class ProjectDownloader {
         fs.access(downloadFolder, async accessError => {
             if (accessError) {
                 fs.mkdir(downloadFolder, { recursive: true }, () => {
-                    console.log(link, downloadFolder);
                     gitDownloader(`direct:${link}.git`, downloadFolder, { "clone": true }, gitDownloadError => {
-                        console.log(gitDownloadError);
+                        gitDownloadError && console.error(gitDownloadError);
                         callback();
                     });
                 });
