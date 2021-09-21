@@ -6,8 +6,7 @@ class ProjectDownloader {
         this.destinationFolder = destinationFolder;
     }
 
-    downloadProject(link, folder, callback = () => {}) {
-        const downloadFolder = `${this.destinationFolder}\\${folder}`;
+    downloadProject(link, downloadFolder, callback = () => {}) {
         fs.access(downloadFolder, async accessError => {
             if (accessError) {
                 fs.mkdir(downloadFolder, { recursive: true }, () => {

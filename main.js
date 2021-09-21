@@ -4,17 +4,20 @@ const { ProjectDownloader } = require("./projectsDownloader");
 const { SecurityScoreCalculator } = require("./securityScoreCalculator");
 
 class TrendingProjectsSecurityScoreCLI {
-    constructor(projectsProvider, projectDownloader, securityScoreCalculator) {
+    constructor(projectsProvider, projectDownloader, securityScoreCalculator, parentFolderForProjects) {
         this.projectsProvider = projectsProvider;
         this.projectDownloader = projectDownloader;
         this.securityScoreCalculator = securityScoreCalculator;
+        this.parentFolderForProjects = parentFolderForProjects;
     }
 
     displayNProjects(number) {
         this.projectsProvider.getTrendingProjects(number).then(projectsList => {
             projectsList.forEach(project => {
-                this.projectDownloader.downloadProject(project.href, project.name, async () => {
-                    const score = await this.securityScoreCalculator.calculateScoreForProject(`${parentFolder}\\${project.name}`)
+                const downloadFolder = `${this.parentFolderForProjects}\\${project.name}`;
+
+                this.projectDownloader.downloadProject(project.href, downloadFolder, async () => {
+                    const score = await this.securityScoreCalculator.calculateScoreForProject(downloadFolder)
                     this._printInformationForProject(project, score);
                 });
             })
@@ -41,22 +44,5 @@ const projectDownloader = new ProjectDownloader(parentFolder);
 
 const securityScoreCalculator = new SecurityScoreCalculator();
 
-// projectsProvider.getTrendingProjects(number).then(projectsList => {
-//     projectsList.forEach(project => {
-//         projectDownloader.downloadProject(project.href, project.name, async () => {
-//             const score = await securityScoreCalculator.calculateScoreForProject(`${parentFolder}\\${project.name}`)
-//             printInformationForProject(project, score);
-//         });
-//     })
-// });
-
-// function printInformationForProject({ name, author, stars, starsInPeriod }, score) {
-//     console.log("--- " + name + " ---");
-//     console.log("author: " + author);
-//     console.log("stars: " + stars);
-//     console.log("stars in period: " + starsInPeriod);
-//     console.log("score: " + score);
-// }
-
-const cli = new TrendingProjectsSecurityScoreCLI(projectsProvider, projectDownloader, securityScoreCalculator);
+const cli = new TrendingProjectsSecurityScoreCLI(projectsProvider, projectDownloader, securityScoreCalculator, parentFolder);
 cli.displayNProjects(number);
